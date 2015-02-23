@@ -248,8 +248,8 @@ class FASTA(object):
         :return:
         """
         print("get_fasta is deprecated. Use load_fasta instead")
-        from BioREST.Uniprot import UniProt
-        u = UniProt(verbose=False)
+        from BioREST.Uniprot import Uniprot
+        u = Uniprot()
         res = u.retrieve(id_, frmt="fasta")
         self._fasta = res[:]
         return res
@@ -263,8 +263,8 @@ class FASTA(object):
         :param id_:
         :raise Exception:
         """
-        from BioREST.Uniprot import UniProt
-        u = UniProt(verbose=False)
+        from BioREST.Uniprot import Uniprot
+        u = Uniprot()
         try:
             res = u.retrieve(id_, frmt="fasta")
             # some entries in uniprot are valid but obsolet and return empty string

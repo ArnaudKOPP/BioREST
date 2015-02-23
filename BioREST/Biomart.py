@@ -56,7 +56,7 @@ from BioREST.Service import REST
 log = logging.getLogger(__name__)
 
 
-class BioMart(REST):
+class Biomart(REST):
     """
     Interface to the `BioMart <http://www.biomart.org>`_ service
     V0.9 implemented
@@ -70,7 +70,7 @@ class BioMart(REST):
         Server are frequenlty down and slow
         """
         url = "http://central.biomart.org"
-        super(BioMart, self).__init__("BioMart", url=url)
+        super(Biomart, self).__init__("BioMart", url=url)
         self.marts_lst = None
 
     def registry(self, frmt='json'):

@@ -138,12 +138,12 @@ __status__ = "Production"
 
 import logging
 from BioREST.Service import REST, check_param_in_list, RestServiceError
-from BioREST.Uniprot import UniProt
+from BioREST.Uniprot import Uniprot
 
 log = logging.getLogger(__name__)
 
 
-class PSICQUIC(REST):
+class Psicquic(REST):
     """
     Interface to the `PSICQUIC service
 
@@ -224,16 +224,16 @@ class PSICQUIC(REST):
         import PSICQUIC
         s = PSICQUIC()
         """
-        super(PSICQUIC, self).__init__("PSICQUIC", url='http://www.ebi.ac.uk/Tools/webservices/psicquic')
+        super(Psicquic, self).__init__("PSICQUIC", url='http://www.ebi.ac.uk/Tools/webservices/psicquic')
         self._registry = None
         try:
-            self.uniprot = UniProt()
+            self.uniprot = Uniprot()
         except:
             print("\033[0;33m[WARNING]\033[0m UniProt service can't be initialised, needed for some parts")
         self.buffer = {}
 
     def _get_formats(self):
-        return PSICQUIC._formats
+        return Psicquic._formats
 
     formats = property(_get_formats, doc="Returns the possible output formats")
 
@@ -915,7 +915,7 @@ class AppsPPI(object):
     """
 
     def __init__(self, verbose=False):
-        self.psicquic = PSICQUIC()
+        self.psicquic = Psicquic()
         self.verbose = verbose
         self.counter = None
         self.relevant_interactions = None

@@ -18,7 +18,7 @@ from BioREST.Service import REST, check_param_in_list
 log = logging.getLogger(__name__)
 
 
-class QuickGO(REST):
+class QuickGo(REST):
     """
     Interface to the `QuickGO <http://www.ebi.ac.uk/QuickGO/WebServices.html>`_ service
     Retrieve information given a GO identifier:
@@ -59,7 +59,7 @@ class QuickGO(REST):
         """
         init
         """
-        super(QuickGO, self).__init__(url="http://www.ebi.ac.uk/QuickGO", name="quickGO")
+        super(QuickGo, self).__init__(url="http://www.ebi.ac.uk/QuickGO", name="quickGO")
 
     def Term(self, goid, frmt="oboxml"):
         """

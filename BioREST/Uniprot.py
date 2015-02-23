@@ -47,7 +47,7 @@ from BioREST.Fasta import FASTA
 log = logging.getLogger(__name__)
 
 
-class UniProt(REST):
+class Uniprot(REST):
     """
     Interface to the uniprot service
     u = UniProt()
@@ -181,7 +181,7 @@ class UniProt(REST):
         """
         **Constructor**
         """
-        super(UniProt, self).__init__(name="UniProt", url=UniProt._url)
+        super(Uniprot, self).__init__(name="UniProt", url=Uniprot._url)
         self.TIMEOUT = 100
         self.__uniprot_flt_file = None
         self.__headers = {'User-Agent': str(user)}
