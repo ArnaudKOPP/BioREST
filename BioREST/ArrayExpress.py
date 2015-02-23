@@ -34,8 +34,8 @@ species 	    Species of the samples. Can use common name (e.g. "mouse") or binom
 
 
 # ### Array Express REST TEST
-    # from TransCellAssay.IO.Rest.ArrayExpress import ArrayExpress
-    # ae = ArrayExpress(verbose=True)
+    # from BioREST import ArrayExpress
+    # ae = ArrayExpress()
     # res = ae.queryExperiments(species="Homo sapiens", ef="organism_part", efv="liver")
     # print(res)
     # res = ae.retrieveExperiment("E-MEXP-31")
@@ -46,13 +46,13 @@ species 	    Species of the samples. Can use common name (e.g. "mouse") or binom
 
 """
 __author__ = "Arnaud KOPP"
-__copyright__ = "© 2014-2015 KOPP Arnaud All Rights Reserved"
+__copyright__ = "© 2015 KOPP Arnaud All Rights Reserved"
 __credits__ = ["KOPP Arnaud"]
-__license__ = "CC BY-NC-ND 4.0 License"
+__license__ = "GNU GPL V2.0"
 __version__ = "1.0"
 __maintainer__ = "Arnaud KOPP"
 __email__ = "kopp.arnaud@gmail.com"
-__status__ = "Dev"
+__status__ = "Production"
 
 import logging
 from BioREST.Service import REST, check_param_in_list

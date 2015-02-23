@@ -19,7 +19,7 @@ Interface to the EUtils web Service.
        -- from http://www.ncbi.nlm.nih.gov/books/NBK25497/, March 2013
 
 # ### Eutils REST TEST
-    # from TransCellAssay.IO.Rest.Eutils import EUtils, EUtilsParser
+    # from BioREST import EUtils, EUtilsParser
     # eutils = EUtils(email='kopp@igbmc.fr', verbose=True)
     #
     # db = eutils.available_databases
@@ -38,13 +38,13 @@ Interface to the EUtils web Service.
 """
 
 __author__ = "Arnaud KOPP"
-__copyright__ = "© 2014-2015 KOPP Arnaud All Rights Reserved"
+__copyright__ = "© 2015 KOPP Arnaud All Rights Reserved"
 __credits__ = ["KOPP Arnaud"]
-__license__ = "CC BY-NC-ND 4.0 License"
+__license__ = "GNU GPL V2.0"
 __version__ = "1.0"
 __maintainer__ = "Arnaud KOPP"
 __email__ = "kopp.arnaud@gmail.com"
-__status__ = "Dev"
+__status__ = "Production"
 
 import webbrowser
 import logging

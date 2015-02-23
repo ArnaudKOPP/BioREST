@@ -5,19 +5,19 @@ Website : www.http://string-db.org
 REST Documentation : http://string-db.org/help/index.jsp?topic=/org.string-db.docs/api.html
 
 # ### String REST TEST
-    # from TransCellAssay.IO.Rest.String import String
+    # from BioREST import String
     # string = String(identity='kopp@igbmc.fr')
 
 """
 
 __author__ = "Arnaud KOPP"
-__copyright__ = "© 2014-2015 KOPP Arnaud All Rights Reserved"
+__copyright__ = "© 2015 KOPP Arnaud All Rights Reserved"
 __credits__ = ["KOPP Arnaud"]
-__license__ = "CC BY-NC-ND 4.0 License"
+__license__ = "GNU GPL V2.0"
 __version__ = "1.0"
 __maintainer__ = "Arnaud KOPP"
 __email__ = "kopp.arnaud@gmail.com"
-__status__ = "Dev"
+__status__ = "Production"
 
 import webbrowser
 import logging

@@ -38,7 +38,7 @@ KEGG ENVIRON 	environ 	ev 	        E number 	    Japanese version: environ_ja ev
 
 # #### KEGG REST TEST
 
-    from TransCellAssay.IO.Rest.KEGG import KEGG, KEGGParser
+    from BioREST import KEGG, KEGGParser
     k = KEGG(verbose=True)
     # print(k.tnumber_to_code("T01001"))
     # print(k.databases)
@@ -125,13 +125,13 @@ KEGG ENVIRON 	environ 	ev 	        E number 	    Japanese version: environ_ja ev
 """
 
 __author__ = "Arnaud KOPP"
-__copyright__ = "© 2014-2015 KOPP Arnaud All Rights Reserved"
+__copyright__ = "© 2015 KOPP Arnaud All Rights Reserved"
 __credits__ = ["KOPP Arnaud"]
-__license__ = "CC BY-NC-ND 4.0 License"
+__license__ = "GNU GPL V2.0"
 __version__ = "1.0"
 __maintainer__ = "Arnaud KOPP"
 __email__ = "kopp.arnaud@gmail.com"
-__status__ = "Dev"
+__status__ = "Production"
 
 import webbrowser
 import collections

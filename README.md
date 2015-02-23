@@ -19,3 +19,8 @@ This package aim to retrieve data from biological database using REST api.
 * String
 * TogoWS
 * Uniprot
+
+## Requirement
+* requests
+* beautifulsoup4
+* Pandas ( highly recommended )

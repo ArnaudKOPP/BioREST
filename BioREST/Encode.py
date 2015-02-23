@@ -4,7 +4,7 @@ Encore REST services
 REST Documentation : https://www.encodeproject.org/help/rest-api/
 
 # ### Encode REST TEST
-    # from TransCellAssay.IO.Rest.Encode import Encode
+    # BioREST import Encode
     # encode = Encode()
     # response = encode.biosample('ENCBS000AAA')
     # encode.show_response(response)
@@ -12,13 +12,13 @@ REST Documentation : https://www.encodeproject.org/help/rest-api/
 """
 
 __author__ = "Arnaud KOPP"
-__copyright__ = "© 2014-2015 KOPP Arnaud All Rights Reserved"
+__copyright__ = "© 2015 KOPP Arnaud All Rights Reserved"
 __credits__ = ["KOPP Arnaud"]
-__license__ = "CC BY-NC-ND 4.0 License"
+__license__ = "GNU GPL V2.0"
 __version__ = "1.0"
 __maintainer__ = "Arnaud KOPP"
 __email__ = "kopp.arnaud@gmail.com"
-__status__ = "Dev"
+__status__ = "Production"
 
 import json
 import logging

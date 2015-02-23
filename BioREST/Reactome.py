@@ -11,7 +11,7 @@ small molecule databases, PubMed, and Gene Ontology
 URL: http://www.reactome.org/ReactomeGWT/entrypoint.html
 REST: http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/ReactomeRESTFulAPI.html
 
-    # from TransCellAssay.IO.Rest.Reactome import Reactome, ReactomeAnalysis
+    # from BioREST import Reactome, ReactomeAnalysis
     # r = Reactome()
     # print(r.front_page_items("homo sapiens"))
     # print(r.get_list_pathways())
@@ -50,13 +50,13 @@ REST: http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/ReactomeRESTFulAPI.ht
 """
 
 __author__ = "Arnaud KOPP"
-__copyright__ = "© 2014-2015 KOPP Arnaud All Rights Reserved"
+__copyright__ = "© 2015 KOPP Arnaud All Rights Reserved"
 __credits__ = ["KOPP Arnaud"]
-__license__ = "CC BY-NC-ND 4.0 License"
+__license__ = "GNU GPL V2.0"
 __version__ = "1.0"
 __maintainer__ = "Arnaud KOPP"
 __email__ = "kopp.arnaud@gmail.com"
-__status__ = "Dev"
+__status__ = "Production"
 
 import logging
 from BioREST.Service import REST, list2string, check_param_in_list

@@ -6,8 +6,8 @@ http://www.uniprot.org/help/programmatic_access
 
 # #### UNIPROT REST TEST
 
-    # from TransCellAssay.IO.Rest.Uniprot import UniProt
-    # u = UniProt(user='kopp@igbmc.fr', verbose=True)
+    # from BioREST import UniProt
+    # u = UniProt(user='kopp@igbmc.fr')
     # print(u.mapping("ACC", "KEGG_ID", query='P43403 P29317'))
     # res = u.search("P43403")
     # print(res)
@@ -27,13 +27,13 @@ http://www.uniprot.org/help/programmatic_access
 
 """
 __author__ = "Arnaud KOPP"
-__copyright__ = "© 2014-2015 KOPP Arnaud All Rights Reserved"
+__copyright__ = "© 2015 KOPP Arnaud All Rights Reserved"
 __credits__ = ["KOPP Arnaud"]
-__license__ = "CC BY-NC-ND 4.0 License"
+__license__ = "GNU GPL V2.0"
 __version__ = "1.0"
 __maintainer__ = "Arnaud KOPP"
 __email__ = "kopp.arnaud@gmail.com"
-__status__ = "Dev"
+__status__ = "Production"
 
 import io
 import urllib.request
@@ -41,7 +41,6 @@ import gzip
 import os
 import logging
 import pandas as pd
-
 from BioREST.Service import REST, list2string, check_param_in_list, tolist, reporthook
 from BioREST.Fasta import FASTA
 
@@ -51,7 +50,7 @@ log = logging.getLogger(__name__)
 class UniProt(REST):
     """
     Interface to the uniprot service
-    u = UniProt(verbose=False)
+    u = UniProt()
     u.mapping("ACC", "KEGG_ID", query='P43403')
     defaultdict(<type 'list'>, {'P43403': ['hsa:7535']})
     res = u.search("P43403")
