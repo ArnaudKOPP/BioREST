@@ -16,3 +16,4 @@ from BioREST.Reactome import Reactome, ReactomeAnalysis
 from BioREST.String import String
 from BioREST.TogoWS import TogoWS
 from BioREST.Uniprot import Uniprot
+from BioREST.HGNC import HGNC

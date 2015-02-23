@@ -88,7 +88,7 @@ class EUtils(REST):
 
         """
         self.databases = None
-        self.tool = "TransCellAssay"
+        self.tool = "BioREST"
         self.email = email
         if self.email == "unknown":
             log.warning(str(warning))

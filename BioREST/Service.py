@@ -270,7 +270,6 @@ class REST(Service):
             if res.status_code != 200:
                 mes = ("Requests Status is not OK => {0} : {1}".format(res.status_code, self.response_codes[
                     res.status_code]))
-                log.error(mes)
                 raise RestServiceError(mes)
 
             # For avoid too many requests
@@ -286,7 +285,7 @@ class REST(Service):
             return res
         except Exception as e:
             log.error(e)
-            raise RestServiceError("Issue while Your current timeout is {0}. ".format(self._timeout))
+            raise RestServiceError(e)
 
     def http_post(self, query, params=None, data=None, frmt='xml', headers=None, files=None, **kargs):
         """
@@ -339,7 +338,6 @@ class REST(Service):
             if res.status_code != 200:
                 mes = ("Requests Status is not OK => {0} : {1}".format(res.status_code, self.response_codes[
                     res.status_code]))
-                log.error(mes)
                 raise RestServiceError(mes)
 
             # For avoid too many requests
@@ -353,7 +351,7 @@ class REST(Service):
                 return res
         except Exception as e:
             log.error(e)
-            raise RestServiceError("Issue while Your current timeout is {0}. ".format(self._timeout))
+            raise RestServiceError(e)
 
     @staticmethod
     def get_user_agent():
