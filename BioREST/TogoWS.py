@@ -27,8 +27,6 @@ class TogoWS(REST):
     def __init__(self):
         """
         **Constructor** TogoWS
-
-        :param verbose: set to False to prevent informative messages
         """
         super(TogoWS, self).__init__(name="TogoWS", url="http://togows.dbcls.jp")
         try:

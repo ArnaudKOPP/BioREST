@@ -21,7 +21,7 @@ __status__ = "Production"
 
 import webbrowser
 import logging
-from BioREST.Service import REST
+from BioREST.Service import REST, check_param_in_list
 
 log = logging.getLogger(__name__)
 
@@ -110,7 +110,7 @@ class String(REST):
                         raise ValueError('additional_network_nodes error value, must be :', __valid_frmt)
                 else:
                     params[key] = value
-        res = self.http_get(query, frmt="txt", params=params)
+        res = self.http_get(query, frmt="json", params=params)
 
         return res
 
@@ -170,19 +170,19 @@ class String(REST):
 
         return res
 
-    def interactors(self, identifier, format='psi-mi', **kwargs):
+    def interactors(self, identifier, frmt='psi-mi', **kwargs):
         """
         List of interaction partners for the query items
         :param identifier:
         :param kwargs:
-        :param format: psi-mi or psi-mi-tab
+        :param frmt: psi-mi or psi-mi-tab
         :return: :raise ValueError:
         """
         __valid_param = ['limit', 'required_score', 'additional_network_nodes']
         __valid_netw_fl = ['evidence', 'confidence', 'actions']
         __valid_frmt = ['psi-mi', 'psi-mi-tab']
 
-        query = 'api/'+str(format)+'/interactors'
+        query = 'api/'+str(frmt)+'/interactors'
 
         params = self.__get_indentifiers_param(identifier)
         params['caller_identity'] = self._identity
@@ -196,23 +196,28 @@ class String(REST):
                         raise ValueError('additional_network_nodes error value, must be :', __valid_netw_fl)
                 else:
                     params[key] = value
-        res = self.http_get(query, frmt="xml", params=params)
+
+        check_param_in_list(frmt, __valid_frmt)
+        if frmt is 'psi-mi':
+            res = self.http_get(query, frmt="xml", params=params)
+        else:
+            res = self.http_get(query, frmt="txt", params=params)
 
         return res
 
-    def interactions(self, identifier, format='psi-mi', **kwargs):
+    def interactions(self, identifier, frmt='psi-mi', **kwargs):
         """
         Interaction network
         :param identifier:
         :param kwargs:
-        :param format: psi-mi or psi-mi-tab
+        :param frmt: psi-mi or psi-mi-tab
         :return: :raise ValueError:
         """
         __valid_param = ['limit', 'required_score', 'additional_network_nodes']
         __valid_netw_fl = ['evidence', 'confidence', 'actions']
         __valid_frmt = ['psi-mi', 'psi-mi-tab']
 
-        query = 'api/'+str(format)+'/interactions'
+        query = 'api/'+str(frmt)+'/interactions'
 
         params = self.__get_indentifiers_param(identifier)
         params['caller_identity'] = self._identity
@@ -227,7 +232,11 @@ class String(REST):
                 else:
                     params[key] = value
 
-        res = self.http_get(query, frmt="xml", params=params)
+        check_param_in_list(frmt, __valid_frmt)
+        if frmt is 'psi-mi':
+            res = self.http_get(query, frmt="xml", params=params)
+        else:
+            res = self.http_get(query, frmt="txt", params=params)
 
         return res
 
@@ -259,7 +268,6 @@ class String(REST):
 
         res = self.http_get(query, frmt="txt", params=params)
 
-        # TODO don't work
         try:
             log.info('Writing image :{}'.format(file))
             f = open(file, "wb")
