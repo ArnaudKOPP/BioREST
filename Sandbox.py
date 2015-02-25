@@ -19,6 +19,7 @@ logging.getLogger('urllib3').setLevel(logging.CRITICAL)
 def rest():
     target = ["NXF1", "ALAS2", "GPI", "EIF4A3", "RRM2", "RAD51L3", "KIF26A", "CDC5L", "ABCC3", "ATP1B2"]
     print(list2string(target, sep='%0D', space=False))
+
     # k = BioREST.KEGG()
     # target = ["NXF1"]
     # for gene in target:
@@ -37,30 +38,44 @@ def rest():
     #
     #     except:
     #         pass
+
     # psi = BioREST.PSICQUIC()
     # psi.TIMEOUT = 10
     # psi.RETRIES = 1
     # psi.retrieve_all('NXF1')
+
     # hgnc = BioREST.HGNC()
     # print(json.dumps(hgnc._info, indent=4))
     # res = hgnc.fetch(storedfield='symbol', term='ALAS2')
     # print(json.dumps(res, indent=4))
     # print(res['response']['docs'][0]['ensembl_gene_id'])
 
-    gene = 'NXF1'
+    gene = target
 
     string = BioREST.String(identity='kopp@igbmc.fr')
     res = string.resolve(gene, species='9606')
     print(json.dumps(res, indent=4))
-    id_gene = ''
+    id_gene = []
     # in case of multiple return, search for
     for i in res:
-        if i['preferredName'] == gene:
-            id_gene = i['stringId']
+        if i['preferredName'] in gene:
+            id_gene.append(i['stringId'])
 
-    interaction = string.interactions(identifier=id_gene, frmt='psi-mi-tab')
-    table = pd.read_table(StringIO(interaction), header=None)
-    print(table)
+    print(id_gene)
+    print(list2string(id_gene, sep='\n', space=False))
+    interaction = string.interactions(identifier=id_gene, frmt='psi-mi-tab', species=9606)
+    print(interaction)
+    # table = pd.read_table(StringIO(interaction), header=None)
+    # print(table)
+
+    react = BioREST.Reactome()
+    print(json.dumps(react.query_hit_pathways(target), indent=4))
+
+    biogrid = BioREST.Biogrid(acceskey="dc589cabccb374194e060d3586b31349")
+    data = biogrid.interaction(geneList='NXF1', taxId=9606)
+
+    df = BioREST.BiogridParser(data_input=data)
+    print(df)
 
 
 rest()

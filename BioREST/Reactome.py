@@ -84,7 +84,7 @@ class Reactome(REST):
                 res = res.strip()
                 self._list_pathways = [x.split("\t") for x in res.split("\n")]
             else:
-                print("\033[0;31m[ERROR]\033[0m could not fetch the pathways")
+                log.error("Could not fetch the pathways")
                 raise IOError
         return self._list_pathways
 
@@ -141,7 +141,7 @@ class Reactome(REST):
         """
         check_param_in_list(frmt, ['PDF', 'PNG'])
         url = "highlightPathwayDiagram/{0}/{1}"
-        genes = list2string(genes)
+        genes = list2string(genes, space=False)
         res = self.http_post(url.format(identifier, frmt), frmt="txt", data=genes)
         return res
 
@@ -254,7 +254,7 @@ class Reactome(REST):
         s.query_hit_pathways(['CDC2'])
         :param query: Gene symbols
         """
-        identifiers = list2string(query)
+        identifiers = list2string(query, space=False)
         res = self.http_post("queryHitPathways", frmt='json', data=identifiers,
                              headers={'Content-Type': "application/json"})
         return res
@@ -356,8 +356,7 @@ class ReactomeAnalysis(REST):
 
     def __init__(self):
         super(ReactomeAnalysis, self).__init__("Reactome Analysis", url="http://www.reactome.org:80/AnalysisService")
-        print("\033[0;33m[WARNING]\033[0m Class in development. Some methods are already working but those required "
-              "POST do not. Coming soon ")
+        log.warning("Class in development.")
 
     def identifiers(self, genes, human_projection=False):
         """

@@ -134,7 +134,7 @@ class Biogrid(REST):
                 if key.lower() in self._valid_parameters:
                     params[key] = value
                 else:
-                    print("\033[0;33m[WARNING]\033[0m %s is not a valid parameters" % key)
+                    log.warning("%s is not a valid parameters" % key)
         else:
             raise ValueError('Need parameters to search interaction')
         res = self.http_get(url, params=params)
@@ -181,11 +181,11 @@ class BiogridParser(object):
     http://wiki.thebiogrid.org/doku.php/biogrid_tab_version_2.0
     """
 
-    def __int__(self, res):
+    def __init__(self, data_input):
         """
         Constructor
         """
-        self.Data = pd.read_table(StringIO(res), header=None)
+        self.Data = pd.read_table(StringIO(data_input), header=None)
         self.Data.columns = ['Biogrid Interaction ID', "Entrez Gene Id A", "Entrez Gene Id B", "Biogrid Id A",
                              "Biogrid Id B", "A", "B", "A Off", "B Off", "A Syn", "B Syn", "Experimental System Name",
                              "Experimental System Type", "Author", "Pubmed Id", "NCBI Tax Id A", "NCBI Tax Id B",

@@ -258,7 +258,7 @@ class KEGG(REST):
         _valid_databases = ["pathway", "brite", "module", "ko", "genome", "compound", "glycan", "reaction", "rpair",
                             "rclass", "enzyme", "disease", "drug", "dgroup", "environ", 'organism']
         if query not in _valid_databases and not self.is_organism(query):
-            print("\033[0;33m[WARNING]\033[0m [list] Not a database and not a orgID, hop for you that it's a valid ID.")
+            log.warning("Not a database and not a orgID, hop for you that it's a valid ID.")
 
         url = "list"
         if query:
@@ -269,8 +269,8 @@ class KEGG(REST):
                 raise Exception(
                     "Not a valid organism Invalid organism provided (%s). See the organismIds attribute" % organism)
             if query not in ["pathway", "module"]:
-                print("""\033[0;31m[ERROR]\033[0m If organism is set, then the first argument (database) must be
-                either 'pathway' or 'module', you provided %s""" % query)
+                log.error("""If organism is set, then the first argument (database) must be either 'pathway' or
+                'module', you provided %s""" % query)
             url += "/" + organism
 
         res = self.http_get(url, "txt")
@@ -333,7 +333,7 @@ class KEGG(REST):
 
         if option:
             if option not in _valid_options:
-                raise AttributeError("\033[0;31m[ERROR]\033[0m Invalid Option. Must be in %s" % _valid_options)
+                raise AttributeError("Invalid Option. Must be in %s" % _valid_options)
             url += "/" + option
 
         res = self.http_get(url, frmt="txt")
@@ -371,8 +371,7 @@ class KEGG(REST):
         isorg = self.is_organism(target)
         if isorg is False and target not in ['ncbi-gi', 'ncbi-geneid', 'uniprot', 'pubchem', 'chebi', 'drug',
                                              'compound', 'glycan']:
-            raise AttributeError(
-                "\033[0;31m[ERROR]\033[0m Invalid syntax, target must be a KEGG id or one of the allowed database")
+            raise AttributeError("Invalid syntax, target must be a KEGG id or one of the allowed database")
 
         url = "conv/" + target + "/" + source
         res = self.http_get(url, frmt="txt")
@@ -399,7 +398,7 @@ class KEGG(REST):
         if target not in _valid_databases and not self.is_organism(target):
             raise ValueError('Database target source provided not available for this operation')
         if source not in _valid_databases and not self.is_organism(source):
-            print("\033[0;33m[WARNING]\033[0m [list] Not a database and not a orgID, hop for you that it's a valid ID.")
+            log.warning("[list] Not a database and not a orgID, hop for you that it's a valid ID.")
 
         url = "link/" + target + "/" + source
         res = self.http_get(url, frmt="txt")
@@ -586,7 +585,7 @@ class KEGG(REST):
 
     def _get_pathways(self):
         if self._organism is None:
-            print("You must set the organism first (e.g., self.organism = 'hsa')")
+            log.warning("You must set the organism first (e.g., self.organism = 'hsa')")
             return
 
         if self._pathway is None:
@@ -597,7 +596,7 @@ class KEGG(REST):
 
     def _get_modules(self):
         if self._organism is None:
-            print("You must set the organism first (e.g., self.organism = 'hsa')")
+            log.warning("You must set the organism first (e.g., self.organism = 'hsa')")
             return
 
         if self._module is None:
