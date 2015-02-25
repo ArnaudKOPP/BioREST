@@ -21,7 +21,7 @@ __status__ = "Production"
 
 import webbrowser
 import logging
-from BioREST.Service import REST, check_param_in_list
+from BioREST.Service import REST, check_param_in_list, list2string
 
 log = logging.getLogger(__name__)
 
@@ -36,11 +36,11 @@ class String(REST):
         if alternative_db and sister_db:
             raise ValueError('Choose one DB')
         if alternative_db and not sister_db:
-            super(String, self).__init__(name="String", url="http://string.embl.de/")
+            super(String, self).__init__(name="String", url="http://string.embl.de")
         if sister_db and not alternative_db:
-            super(String, self).__init__(name="String", url="http://stitch.embl.de/")
+            super(String, self).__init__(name="String", url="http://stitch.embl.de")
         if not alternative_db and not sister_db:
-            super(String, self).__init__(name="String", url="http://string-db.org/")
+            super(String, self).__init__(name="String", url="http://string-db.org")
 
     @staticmethod
     def print_doc_requests():
@@ -82,8 +82,11 @@ class String(REST):
         ''')
 
     @staticmethod
-    def __get_indentifiers_param(identifier):
-        params = {'identifier': str(identifier)}
+    def __get_indentifiers_param(identifier, listing=False):
+        if listing:
+            params = {'identifiers': str(identifier)}
+        else:
+            params = {'identifier': str(identifier)}
         return params
 
     def resolve(self, identifier, **kwargs):
@@ -96,9 +99,13 @@ class String(REST):
         __valid_param = ['species', 'format']
         __valid_frmt = ['full', 'only_ids']
 
-        query = 'api/json/resolve'
+        if isinstance(identifier, list):
+            query = 'api/json/resolveList'
+            params = self.__get_indentifiers_param(list2string(identifier, sep='%0D', space=False), listing=True)
+        else:
+            query = 'api/json/resolve'
+            params = self.__get_indentifiers_param(identifier)
 
-        params = self.__get_indentifiers_param(identifier)
         params['caller_identity'] = self._identity
 
         for key, value in kwargs.items():
@@ -124,9 +131,13 @@ class String(REST):
         __valid_param = ['format', 'limit']
         __valid_frmt = ['colon', 'pmids']
 
-        query = 'api/tsv/abstracts'
+        if isinstance(identifier, list):
+            query = 'api/tsv/abstractsList'
+            params = self.__get_indentifiers_param(list2string(identifier, sep='%0D', space=False), listing=True)
+        else:
+            query = 'api/tsv/abstracts'
+            params = self.__get_indentifiers_param(identifier)
 
-        params = self.__get_indentifiers_param(identifier)
         params['caller_identity'] = self._identity
 
         for key, value in kwargs.items():
@@ -152,9 +163,13 @@ class String(REST):
         __valid_param = ['limit', 'required_score', 'additional_network_nodes']
         __valide_netw_fl = ['evidence', 'confidence', 'actions']
 
-        query = 'api/tsv/actions'
+        if isinstance(identifier, list):
+            query = 'api/tsv/actionsList'
+            params = self.__get_indentifiers_param(list2string(identifier, sep='%0D', space=False), listing=True)
+        else:
+            query = 'api/tsv/actions'
+            params = self.__get_indentifiers_param(identifier)
 
-        params = self.__get_indentifiers_param(identifier)
         params['caller_identity'] = self._identity
 
         for key, value in kwargs.items():
@@ -180,11 +195,15 @@ class String(REST):
         """
         __valid_param = ['limit', 'required_score', 'additional_network_nodes']
         __valid_netw_fl = ['evidence', 'confidence', 'actions']
-        __valid_frmt = ['psi-mi', 'psi-mi-tab']
+        __valid_frmt = ['psi-mi', 'psi-mi-tab', 'tsv', 'tsv-no-header']
 
-        query = 'api/'+str(frmt)+'/interactors'
+        if isinstance(identifier, list):
+            query = 'api/'+str(frmt)+'/interactorsList'
+            params = self.__get_indentifiers_param(list2string(identifier, sep='%0D', space=False), listing=True)
+        else:
+            query = 'api/'+str(frmt)+'/interactors'
+            params = self.__get_indentifiers_param(identifier)
 
-        params = self.__get_indentifiers_param(identifier)
         params['caller_identity'] = self._identity
 
         for key, value in kwargs.items():
@@ -217,9 +236,13 @@ class String(REST):
         __valid_netw_fl = ['evidence', 'confidence', 'actions']
         __valid_frmt = ['psi-mi', 'psi-mi-tab']
 
-        query = 'api/'+str(frmt)+'/interactions'
+        if isinstance(identifier, list):
+            query = 'api/'+str(frmt)+'/interactionsList'
+            params = self.__get_indentifiers_param(list2string(identifier, sep='%0D', space=False), listing=True)
+        else:
+            query = 'api/'+str(frmt)+'/interactions'
+            params = self.__get_indentifiers_param(identifier)
 
-        params = self.__get_indentifiers_param(identifier)
         params['caller_identity'] = self._identity
 
         for key, value in kwargs.items():
@@ -251,9 +274,13 @@ class String(REST):
         __valid_param = ['limit', 'required_score', 'additional_network_nodes']
         __valide_netw_fl = ['evidence', 'confidence', 'actions']
 
-        query = 'api/image/network'
+        if isinstance(identifier, list):
+            query = 'api/image/networkList'
+            params = self.__get_indentifiers_param(list2string(identifier, sep='%0D', space=False), listing=True)
+        else:
+            query = 'api/image/network'
+            params = self.__get_indentifiers_param(identifier)
 
-        params = self.__get_indentifiers_param(identifier)
         params['caller_identity'] = self._identity
 
         for key, value in kwargs.items():
