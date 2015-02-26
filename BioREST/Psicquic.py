@@ -878,6 +878,10 @@ class Psicquic(REST):
             assert len(query[k]) == 0
         return mapping
 
+    def __str__(self):
+        txt = self._get_active_db()
+        return txt
+
 
 class AppsPPI(object):
     """

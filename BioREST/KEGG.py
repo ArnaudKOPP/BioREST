@@ -106,7 +106,6 @@ KEGG ENVIRON 	environ 	ev 	        E number 	    Japanese version: environ_ja ev
     # k.show_pathway("path:hsa05416", dcolor="white", keggid=['1525', '1604', '2534'])
     # # You can refine the colors using a dictionary:
     # k.show_pathway("path:hsa05416", dcolor="white", keggid={'1525': 'yellow,red', '1604': 'blue,green', '2534': "blue"})
-    # print(k.check_dbentries("hsa:10458+ece:Z5100"))
     # print(k.get_pathway_by_gene("7535", "hsa"))
     # s = KEGGParser()
     # data = s.get("hsa:7535")
@@ -442,56 +441,6 @@ class KEGG(REST):
         res = webbrowser.open(url)
         return res
 
-    @staticmethod
-    def show_module(module_id):
-        """
-        Show a given module inside a web browser
-        :param str module_id: a valid module Id. See :meth:`moduleIds`
-        Validity of modId is not checked but if wrong the URL will not open a
-        proper web page.
-        """
-        if module_id.startswith("md:"):
-            module_id = module_id.split(":")[1]
-        url = "http://www.kegg.jp/module/" + module_id
-        res = webbrowser.open(url)
-        return res
-
-    def check_dbentries(self, dbentries, check_all=True):
-        """
-        Checks that all entries provided exist in the KEGG database
-        :param str dbentries: a dbentries list. entries are separated by the +'
-            sign (e.g., "hsa:10458+ece:Z5100")
-        :param bool check_all: checks all entries (Default) or stop as soon as an
-            entry is not well formed.
-        :return: True if all entries are correct. False otherwise
-        ::
-            s = KEGG()
-            s.check_dbentries("hsa:10458+ece:Z5100")
-        """
-        from urllib.error import HTTPError
-
-        entries = dbentries.split("+")
-        allstatus = True
-        for entry in entries:
-            try:
-                self.get(entry)
-                status = True
-            # if ill-formed, an entry will raise the 404 error.
-            except HTTPError as e:
-                if e.code == 404:
-                    status = False
-                    allstatus = False
-                    if check_all is False:
-                        print(entry, status)
-                        return False
-                else:
-                    print(e)
-                    raise
-            except:
-                raise
-            print(entry, status)
-        return allstatus
-
     def _get_db(self):
         return KEGG.info(self)
 
@@ -679,7 +628,7 @@ class KEGG(REST):
         assert len(subtypes) == len(relations)
 
         for relation, subtype in zip(relations, subtypes):
-            if len(subtype) == 0:  # nothing to do with the species ??? TODO
+            if len(subtype) == 0:
                 pass
             else:
                 for this in subtype:

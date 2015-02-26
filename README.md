@@ -20,6 +20,7 @@ This package aim to retrieve data from biological database using REST api.
 * TogoWS
 * Uniprot
 * HGNC
+* DGIdb
 
 ## Requirement
 * requests

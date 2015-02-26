@@ -147,7 +147,6 @@ class EUtils(REST):
                 params[key] = value
             else:
                 print(key + ' Not a valid parameters')
-        # TODO make a post call for long query ( several hundred char long)
         if retmode is 'xml':
             res = self.easyXML(self.http_get(url, frmt='xml', params=params))
         else:
@@ -297,7 +296,6 @@ class EUtils(REST):
         params = {'db': db, 'id': sid, 'tool': self.tool, 'email': self.email}
         _valid_opt_param = ['query_key', 'WebEnv']
         url = 'epost.fcgi'
-        # TODO post call for more than 200 sid long requests
         for key, value in kwargs.items():
             if key in _valid_opt_param:
                 params[key] = value
