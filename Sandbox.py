@@ -54,7 +54,7 @@ def rest():
 
     string = BioREST.String(identity='kopp@igbmc.fr')
     res = string.resolve(gene, species='9606')
-    print(json.dumps(res, indent=4))
+    # print(json.dumps(res, indent=4))
     id_gene = []
     # in case of multiple return, search for
     for i in res:
@@ -64,18 +64,29 @@ def rest():
     print(id_gene)
     print(list2string(id_gene, sep='\n', space=False))
     interaction = string.interactions(identifier=id_gene, frmt='psi-mi-tab', species=9606)
-    print(interaction)
-    # table = pd.read_table(StringIO(interaction), header=None)
-    # print(table)
+    # print(interaction)
+    # file = open('/home/arnaud/Desktop/inter.txt', mode='w')
+    # file.write(interaction)
+    # file.close()
+    table = pd.read_table(StringIO(interaction), header=None)
+    print(table)
 
-    react = BioREST.Reactome()
-    print(json.dumps(react.query_hit_pathways(target), indent=4))
+    # react = BioREST.Reactome()
+    # print(json.dumps(react.query_hit_pathways(target), indent=4))
+    #
+    # biogrid = BioREST.Biogrid(acceskey="dc589cabccb374194e060d3586b31349")
+    # data = biogrid.interaction(geneList='NXF1', taxId=9606)
+    #
+    # df = BioREST.BiogridParser(data_input=data)
+    # print(df)
 
-    biogrid = BioREST.Biogrid(acceskey="dc589cabccb374194e060d3586b31349")
-    data = biogrid.interaction(geneList='NXF1', taxId=9606)
-
-    df = BioREST.BiogridParser(data_input=data)
-    print(df)
-
+    dgidb = BioREST.DGIdb()
+    print(dgidb.Search_Interactions(genes=['FLT1', 'MM1', 'FAKE'], drug_types='antineoplastic',
+                                    interaction_sources='TALC'))
+    print(dgidb.Interaction_Source())
+    print(dgidb.Interaction_Type())
+    print(dgidb.Gene_Categories())
+    print(dgidb.Source_Trust_Levels())
+    print(dgidb.Drug_Types())
 
 rest()

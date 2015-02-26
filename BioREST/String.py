@@ -31,15 +31,15 @@ class String(REST):
     Class for doing REST requests to String-db
     """
 
-    def __init__(self, identity,  alternative_db=False, sister_db=False):
+    def __init__(self, identity,  alt=False, stitch=False):
         self._identity = identity
-        if alternative_db and sister_db:
+        if alt and stitch:
             raise ValueError('Choose one DB')
-        if alternative_db and not sister_db:
+        if alt and not stitch:
             super(String, self).__init__(name="String", url="http://string.embl.de")
-        if sister_db and not alternative_db:
+        if stitch and not alt:
             super(String, self).__init__(name="String", url="http://stitch.embl.de")
-        if not alternative_db and not sister_db:
+        if not alt and not stitch:
             super(String, self).__init__(name="String", url="http://string-db.org")
 
     @staticmethod
