@@ -264,8 +264,8 @@ class ArrayExpress(REST):
         files = self.retrieveFilesFromExperiment(experiment)
         self.format = frmt[:]
 
-        assert filename in files, """Error. Provided filename does not seem to be correct.
-            Files available for %s experiment are %s """ % (experiment, files)
+        assert filename in files, log.error("""Error. Provided filename does not seem to be correct.
+            Files available for %s experiment are %s """ % (experiment, files))
 
         url = "files/" + experiment + "/" + filename
 
@@ -294,7 +294,7 @@ class ArrayExpress(REST):
         .. warning:: if format is json, filenames cannot be found so you
             must use format set to xml
         """
-        assert self.format == "xml", "json format not supported to retrieve the filenames"
+        assert self.format == "xml", log.error("json format not supported to retrieve the filenames")
         res = self.queryExperiments(keywords=experiment)
         exp = res.getchildren()[0]
         files = [x.getchildren() for x in exp.getchildren() if x.tag == "files"]

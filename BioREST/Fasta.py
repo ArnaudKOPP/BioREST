@@ -57,7 +57,7 @@ class MultiFASTA(object):
 
             # append in the ordered dictionary
             self._fasta[id_] = f
-            print("%s loaded" % id_)
+            log.info("%s loaded" % id_)
 
     def save_fasta(self, filename):
         """
@@ -85,7 +85,8 @@ class MultiFASTA(object):
             if f.accession is not None and f.accession not in self.ids:
                 self._fasta[f.accession] = f
             else:
-                print("Accession %s is already in the ids list or could not be interpreted. skipped" % str(f.accession))
+                log.warning("Accession %s is already in the ids list or could not be interpreted. skipped" %
+                            str(f.accession))
 
     def _get_df(self):
         df = pd.concat([self.fasta[id_].df for id_ in self.fasta.keys()])
@@ -241,19 +242,6 @@ class FASTA(object):
         str_ = self.fasta
         return str_
 
-    def get_fasta(self, id_):
-        """
-
-        :param id_:
-        :return:
-        """
-        print("get_fasta is deprecated. Use load_fasta instead")
-        from BioREST.Uniprot import Uniprot
-        u = Uniprot()
-        res = u.retrieve(id_, frmt="fasta")
-        self._fasta = res[:]
-        return res
-
     def load(self, id_):
         self.load_fasta(id_)
 
@@ -310,20 +298,9 @@ class FASTA(object):
         self._fasta = data[:]
         self._fasta = self._fasta[0]
         if self.dbtype not in self.known_dbtypes:
-            print("Only sp and gi header are recognised so far but sequence and header are loaded")
+            log.warning("Only sp and gi header are recognised so far but sequence and header are loaded")
 
     @staticmethod
     def _interpret(data):
         # cleanup the data in case of empty spaces or \n characters
         return data
-
-
-
-
-
-
-
-
-
-
-

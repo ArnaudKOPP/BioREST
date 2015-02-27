@@ -177,7 +177,7 @@ class Uniprot(REST):
                       'protein names', 'reviewed', 'score', 'sequence', '3d', 'subcellular locations', 'taxonomy',
                       'tools', 'version', 'virus hosts', 'lineage-id', 'sequence-modified', 'proteome']
 
-    def __init__(self, user="TransCellAssayUser"):
+    def __init__(self, user="BioRestUser"):
         """
         **Constructor**
         """
@@ -191,19 +191,19 @@ class Uniprot(REST):
         Download uniprot swissprot fasta file
         :param directory: Where to save file
         """
-        print('\033[0;32m[INFO]\033[0m Retrieving file')
+        log.infor('Retrieving file')
         url = "ftp://ftp.ebi.ac.uk/pub/databases/uniprot/knowledgebase/uniprot_sprot.dat.gz"
         gzfile = os.path.join(directory, "uniprot_sprot.dat.gz")
         urllib.request.urlretrieve(url=url, filename=gzfile, reporthook=reporthook)
 
-        print("\033[0;33m[WARNING]\033[0m Uncompressing file...")
+        log.info("Uncompressing file...")
         str_file = gzip.open("uniprot_sprot.dat.gz")
         content = str_file.read()
         self.__uniprot_flt_file = os.path.join(directory, "uniprot_sprot.fasta")
         f = open(self.__uniprot_flt_file, "wb")
         f.write(content)
         f.close()
-        print('\033[0;32m[INFO]\033[0m Finish uncompressing file')
+        log.info('Finish uncompressing file')
 
     def mapping(self, fr="ID", to="KEGG_ID", query="P13368"):
         """
@@ -238,7 +238,7 @@ class Uniprot(REST):
             del result[0]
             del result[0]
         except:
-            print("\033[0;33m[WARNING]\033[0m Results seems empty...returning empty dictionary.")
+            log.warning("Results seems empty...returning empty dictionary.")
             return {}
 
         if len(result) == 0:
@@ -463,7 +463,7 @@ class Uniprot(REST):
             else:
                 break
             if len(res) == 0:
-                print("\033[0;33m[WARNING]\033[0m some entries %s not found" % entries)
+                log.warning("Some entries %s not found" % entries)
             else:
                 df = pd.read_csv(io.StringIO(res), sep="\t")
                 if isinstance(output, type(None)):
@@ -480,7 +480,7 @@ class Uniprot(REST):
                 res = output[col].apply(lambda x: [this.strip() for this in str(x).split(";") if this != "nan"])
                 output[col] = res
             except:
-                print("\033[0;33m[WARNING]\033[0m column could not be parsed. %s" % col)
+                log.warning("Column could not be parsed. %s" % col)
 
         output.Sequence = output['Sequence'].apply(lambda x: x.replace(" ", ""))
         return output

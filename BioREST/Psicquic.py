@@ -229,7 +229,7 @@ class Psicquic(REST):
         try:
             self.uniprot = Uniprot()
         except:
-            print("\033[0;33m[WARNING]\033[0m UniProt service can't be initialised, needed for some parts")
+            log.warning("UniProt service can't be initialised, needed for some parts")
         self.buffer = {}
 
     def _get_formats(self):
@@ -323,11 +323,11 @@ class Psicquic(REST):
                 raise ValueError("database %s not in active databases" % x)
 
         for name in service:
-            print("\033[0;33m[WARNING]\033[0m Querying %s" % name)
+            log.warning("Querying %s" % name)
             res = self.get_db_properties(name)
             results[name] = res
         for name in service:
-            print("Found %s in %s" % (len(results[name]), name))
+            log.info("Found %s in %s" % (len(results[name]), name))
         return results
 
     def get_db_formats(self, service):
@@ -358,11 +358,11 @@ class Psicquic(REST):
                 raise ValueError("database %s not in active databases" % x)
 
         for name in service:
-            print("\033[0;33m[WARNING]\033[0m Querying %s" % name)
+            log.warning("Querying %s" % name)
             res = self.get_db_formats(name)
             results[name] = res
         for name in service:
-            print("Found %s in %s" % (len(results[name]), name))
+            log.info("Found %s in %s" % (len(results[name]), name))
         return results
 
     def get_db_version(self, service):
@@ -393,11 +393,11 @@ class Psicquic(REST):
                 raise ValueError("database %s not in active databases" % x)
 
         for name in service:
-            print("\033[0;33m[WARNING]\033[0m Querying %s" % name)
+            log.warning("Querying %s" % name)
             res = self.get_db_version(name)
             results[name] = res
         for name in service:
-            print("Found %s in %s" % (len(results[name]), name))
+            log.info("Found %s in %s" % (len(results[name]), name))
         return results
 
     def _get_registry(self):
@@ -635,8 +635,7 @@ class Psicquic(REST):
 
         chembl and chebi IDs are kept unchanged.
         """
-
-        print("converting data into known names")
+        log.info("converting data into known names")
         idsa = [x[0].replace("\"", "") for x in data]
         idsb = [x[1].replace("\"", "") for x in data]
         # extract the first and second ID but let us check if it is part of a
@@ -662,10 +661,10 @@ class Psicquic(REST):
                 if len(valid_dbs) >= 1:
                     idsa[i] = valid_dbs[0][0] + ":" + valid_dbs[0][1]
                 else:
-                    print("\033[0;33m[WARNING]\033[0m none of the DB for this entry (%s) are available" % (entry))
+                    log.warning("None of the DB for this entry (%s) are available" % entry)
                     idsa[i] = "?" + dbs[0] + ":" + ids[0]
             except:
-                print("\033[0;33m[WARNING]\033[0m Could not extract name from %s" % entry)
+                log.warning("Could not extract name from %s" % entry)
                 idsa[i] = "??:" + entry  # we add a : so that we are sure that a split(":") will work
         # the second ID
         for i, entry in enumerate(idsb):
@@ -677,19 +676,19 @@ class Psicquic(REST):
                 if len(valid_dbs) >= 1:
                     idsb[i] = valid_dbs[0][0] + ":" + valid_dbs[0][1]
                 else:
-                    print("\033[0;33m[WARNING]\033[0m none of the DB (%s) for this entry are available" % entry)
+                    log.warning("None of the DB (%s) for this entry are available" % entry)
                     idsb[i] = "?" + dbs[0] + ":" + ids[0]
             except:
-                print("\033[0;33m[WARNING]\033[0m Could not extract name from %s" % entry)
+                log.warning("Could not extract name from %s" % entry)
                 idsb[i] = "??:" + entry
 
         counta = len([x for x in idsa if x.startswith("?")])
         countb = len([x for x in idsb if x.startswith("?")])
         if counta + countb > 0:
-            print("\033[0;33m[WARNING]\033[0m %s ids out of %s were not identified" % (counta + countb, len(idsa) * 2))
+            print(" %s ids out of %s were not identified" % (counta + countb, len(idsa) * 2))
             print(set([x.split(":")[0] for x in idsa if x.startswith("?")]))
             print(set([x.split(":")[0] for x in idsb if x.startswith("?")]))
-        print("\033[0;33m[WARNING]\033[0m knownName done")
+        log.info("\033[0;33m[WARNING]\033[0m knownName done")
         return idsa, idsb
 
     @staticmethod
@@ -712,7 +711,7 @@ class Psicquic(REST):
         """
         results = {}
         for k in data.keys():
-            print("\033[0;33m[WARNING]\033[0m Post cleaning %s" % k)
+            log.warning("Post cleaning %s" % k)
             ret = self.post_cleaning(data[k], keep_only="HUMAN", verbose=verbose)
             if len(ret):
                 results[k] = ret
@@ -721,7 +720,7 @@ class Psicquic(REST):
         return results
 
     @staticmethod
-    def post_cleaning(data, keep_only="HUMAN", remove_db=["chebi", "chembl"], keep_self_loop=False, verbose=True):
+    def post_cleaning(data, keep_only="HUMAN", remove_db=["chebi", "chembl"], keep_self_loop=False):
         """
         Remove entries with a None and keep only those with the keep pattern
         :param verbose:
@@ -730,34 +729,28 @@ class Psicquic(REST):
         :param keep_only:
         :param data:
         """
-        if verbose: print("Before removing anything: ", len(data))
+        log.info("Before removing anything: ", len(data))
 
         data = [x for x in data if x[0] is not None and x[1] is not None]
-        if verbose:
-            print("After removing the None: ", len(data))
+        log.info("After removing the None: ", len(data))
 
         data = [x for x in data if x[0].startswith("!") is False and x[1].startswith("!") is False]
-        if verbose:
-            print("After removing the !: ", len(data))
+        log.info("After removing the !: ", len(data))
 
         for db in remove_db:
             data = [x for x in data if x[0].startswith(db) is False]
             data = [x for x in data if x[1].startswith(db) is False]
-            if verbose:
-                print("After removing entries that match %s : " % db, len(data))
+            log.info("After removing entries that match %s : " % db, len(data))
 
         data = [x for x in data if keep_only in x[0] and keep_only in x[1]]
-        if verbose:
-            print("After removing entries that don't match %s : " % keep_only, len(data))
+        log.info("After removing entries that don't match %s : " % keep_only, len(data))
 
         if keep_self_loop is False:
             data = [x for x in data if x[0] != x[1]]
-            if verbose:
-                print("After removing self loop : ", len(data))
+            log.info("After removing self loop : ", len(data))
 
         data = list(set(data))
-        if verbose:
-            print("After removing identical entries", len(data))
+        log.info("After removing identical entries", len(data))
 
         return data
 
@@ -769,7 +762,7 @@ class Psicquic(REST):
         """
         results = {}
         for k in data.keys():
-            print("Analysing %s" % k)
+            log.info("Analysing %s" % k)
             results[k] = self.convert(data[k], db=k)
         return results
 
@@ -780,7 +773,7 @@ class Psicquic(REST):
         :param db:
         :return:
         """
-        print("Converting the database %s" % db)
+        log.info("Converting the database %s" % db)
         idsa, idsb = self.know_name(data)
         mapping = self.mapping_one_db(data)
         results = []
@@ -809,7 +802,7 @@ class Psicquic(REST):
         :param data:
         """
         query = {}
-        print("Converting IDs with proper DB name (knownName function)")
+        log.info("Converting IDs with proper DB name (knownName function)")
         entriesa, entriesb = self.know_name(data)  # idsA and B contains list of a single identifier of the form db:id
         # the db is known from _mapping.uniprot otherwise it is called "unknown"
 
@@ -854,7 +847,7 @@ class Psicquic(REST):
                     dbname = self._mapping_uniprot[k]
 
                     if dbname is not None:
-                        print("Request sent to uniprot for %s database (%s/%s)" % (dbname, counter, n))
+                        log.info("Request sent to uniprot for %s database (%s/%s)" % (dbname, counter, n))
                         res = self.uniprot.mapping(fr=dbname, to="ID", query=" ".join(this_query))
                         for x in this_query:
                             if x not in res:  # was not found
@@ -867,7 +860,7 @@ class Psicquic(REST):
                                 if len(res[x]) == 1:
                                     mapping[x] = res[x][0]
                                 else:
-                                    print("Psicquic mapping found more than 1 id. keep first one")
+                                    log.info("Psicquic mapping found more than 1 id. keep first one")
                                     mapping[x] = res[x][0]
                     else:
                         for x in this_query:
@@ -939,7 +932,7 @@ class AppsPPI(object):
             interactors A and B, the score, the type of interactions and the score.
         """
         # self.results_query = self.psicquic.queryAll("ZAP70 AND species:9606")
-        print("Requests sent to psicquic. Can take a while, please be patient...")
+        log.warning("Requests sent to psicquic. Can take a while, please be patient...")
         self.results_query = self.psicquic.retrieve_all(query, databases)
         self.interactions = self.psicquic.convert_all(self.results_query)
         self.interactions = self.psicquic.post_cleaning_all(self.interactions,
@@ -959,7 +952,7 @@ class AppsPPI(object):
             p.summary()
         """
         for k, v in self.interactions.items():
-            print("Found %s interactions within %s database" % (len(v), k))
+            log.info("Found %s interactions within %s database" % (len(v), k))
 
         counter = {}
         for k in self.interactions.keys():
@@ -980,7 +973,7 @@ class AppsPPI(object):
         summ = {}
         for i in range(1, n + 1):
             res = [(x.split("++"), counter[x]) for x in counter.keys() if len(counter[x]) == i]
-            print("Found %s interactions in %s common databases" % (len(res), i))
+            log.info("Found %s interactions in %s common databases" % (len(res), i))
             res = [x.split("++") for x in counter.keys() if len(counter[x]) == i]
             if len(res):
                 summ[i] = [x for x in res]
@@ -1000,8 +993,7 @@ class AppsPPI(object):
         uniq = len(self.counter[key])
         ret = [x for k in self.interactions.keys() for x in self.interactions[k] if x[0] == ida and x[1] == idb]
         N = len(ret)
-        print("Interactions %s -- %s has %s entries in %s databases (%s):" %
-              (ida, idb, N, uniq, self.counter[key]))
+        log.info("Interactions %s -- %s has %s entries in %s databases (%s):" % (ida, idb, N, uniq, self.counter[key]))
         for r in ret:
             print(r[5], " reference", r[4])
 

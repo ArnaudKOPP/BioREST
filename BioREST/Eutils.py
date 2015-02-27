@@ -146,7 +146,7 @@ class EUtils(REST):
             if key in _valid_opt_param:
                 params[key] = value
             else:
-                print(key + ' Not a valid parameters')
+                log.warning(key + ' Not a valid parameters')
         if retmode is 'xml':
             res = self.easyXML(self.http_get(url, frmt='xml', params=params))
         else:
@@ -353,4 +353,4 @@ class EUtilsParser(AttrDict):
                 txt += "{0:10}:  {1}\n".format(this.Name, this.Description)
             return txt
         else:
-            print("Not implemented for {0}".format(name))
+            log.warning("Not implemented for {0}".format(name))
