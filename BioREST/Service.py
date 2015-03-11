@@ -554,8 +554,7 @@ class readXML(easyXML):
     """
 
     def __init__(self, filename):
-        url = urlopen(filename, "r")
-        self.data = url.read()
+        self.data = urlopen(filename, "r").read()
         super(readXML, self).__init__(self.data)
 
 
