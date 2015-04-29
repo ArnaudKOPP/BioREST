@@ -13,6 +13,7 @@ __license__ = "GNU GPL V2.0"
 __maintainer__ = "Arnaud KOPP"
 __email__ = "kopp.arnaud@gmail.com"
 __status__ = "Production"
+__version__ = "1.0"
 
 import sys
 import os
