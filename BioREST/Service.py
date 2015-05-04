@@ -263,9 +263,9 @@ class REST(Service):
             kargs['params'] = params
             kargs['timeout'] = self._timeout
 
+            log.debug("Start downloading requests")
             res = self.session.get(url, **kargs)
-
-            log.debug("Targeted URL :%s" % res.url)
+            log.debug("Finish downloading requests Targeted URL :%s" % res.url)
 
             if res.status_code != 200:
                 mes = ("Requests Status is not OK => {0} : {1}".format(res.status_code, self.response_codes[
@@ -332,8 +332,9 @@ class REST(Service):
             url = '%s/%s' % (self.url, query)
 
         try:
-            log.debug("Targeted URL :%s" % url)
+            log.debug("Start downloading requests")
             res = self.session.post(url, **kargs)
+            log.debug("Finish downloading requests Targeted URL :%s" % url)
 
             if res.status_code != 200:
                 mes = ("Requests Status is not OK => {0} : {1}".format(res.status_code, self.response_codes[

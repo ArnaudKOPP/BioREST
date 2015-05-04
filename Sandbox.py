@@ -18,7 +18,7 @@ logging.getLogger('urllib3').setLevel(logging.CRITICAL)
 
 def rest():
     target = ["NXF1", "ALAS2", "GPI", "EIF4A3", "RRM2", "RAD51L3", "KIF26A", "CDC5L", "ABCC3", "ATP1B2"]
-    print(list2string(target, sep='%0D', space=False))
+    # print(list2string(target, sep='%0D', space=False))
 
     # k = BioREST.KEGG()
     # target = ["NXF1"]
@@ -80,13 +80,13 @@ def rest():
     # df = BioREST.BiogridParser(data_input=data)
     # print(df)
 
-    dgidb = BioREST.DGIdb()
-    print(dgidb.Search_Interactions(genes=['FLT1', 'MM1', 'FAKE'], drug_types='antineoplastic',
-                                    interaction_sources='TALC'))
-    print(dgidb.Interaction_Source())
-    print(dgidb.Interaction_Type())
-    print(dgidb.Gene_Categories())
-    print(dgidb.Source_Trust_Levels())
-    print(dgidb.Drug_Types())
+    # dgidb = BioREST.DGIdb()
+    # print(dgidb.Search_Interactions(genes=['FLT1', 'MM1', 'FAKE'], drug_types='antineoplastic',
+    #                                 interaction_sources='TALC'))
+    # print(dgidb.Interaction_Source())
+    # print(dgidb.Interaction_Type())
+    # print(dgidb.Gene_Categories())
+    # print(dgidb.Source_Trust_Levels())
+    # print(dgidb.Drug_Types())
 
 rest()
