@@ -1,16 +1,20 @@
 #BioREST
 
-This package aim to retrieve data from biological database using REST api.
+BioREST is a Python package that provides access to Bioinformatices Web Services (UniProt ...).
+A framework to implement Web Services wrappers with REST protocols are available.
 
-## Database available
+BioServices provides access to this webservices :
+
 * ArrayExpress
 * BioDBnet
 * BioGriD
 * Biomart
+* DGIdb
 * Encode
 * Ensembl
 * Eutils
 * Fasta
+* HGNC
 * Intact
 * KEGG
 * Psicquic
@@ -19,8 +23,6 @@ This package aim to retrieve data from biological database using REST api.
 * String
 * TogoWS
 * Uniprot
-* HGNC
-* DGIdb
 
 ## Requirement
 * requests
