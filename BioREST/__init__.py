@@ -1,5 +1,4 @@
 # coding=utf-8
-__author__ = "Arnaud KOPP"
 from BioREST.ArrayExpress import ArrayExpress
 from BioREST.BioDBnet import BioDBnet
 from BioREST.Biogrid import Biogrid, BiogridParser
@@ -18,3 +17,5 @@ from BioREST.TogoWS import TogoWS
 from BioREST.Uniprot import Uniprot
 from BioREST.HGNC import HGNC
 from BioREST.DGIdb import DGIdb
+from BioREST.BioCyc import BioCyc
+from BioREST.PDB import PDB

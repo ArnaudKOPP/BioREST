@@ -16,77 +16,78 @@ logging.getLogger('requests').setLevel(logging.CRITICAL)
 logging.getLogger('urllib3').setLevel(logging.CRITICAL)
 
 
-def rest():
-    target = ["NXF1", "ALAS2", "GPI", "EIF4A3", "RRM2", "RAD51L3", "KIF26A", "CDC5L", "ABCC3", "ATP1B2"]
-    # print(list2string(target, sep='%0D', space=False))
+# target = ["NXF1", "ALAS2", "GPI", "EIF4A3", "RRM2", "RAD51L3", "KIF26A", "CDC5L", "ABCC3", "ATP1B2"]
+# print(list2string(target, sep='%0D', space=False))
 
-    # k = BioREST.KEGG()
-    # target = ["NXF1"]
-    # for gene in target:
-    #     try:
-    #         # res = k.find("hsa", gene)
-    #         # print(res)
-    #         des = k.get(":".join(["hsa", gene]))
-    #         print(des)
-    #
-    #         # res = TCA.KEGGParser(des)
-    #         # print(res['PATHWAY'])
-    #         # print(json.dumps(res, indent=4))
-    #
-    #         # path = k.get(res['PATHWAY'][0].split()[0], "kgml")
-    #         # print(path)
-    #
-    #     except:
-    #         pass
+# k = BioREST.KEGG()
+# target = ["NXF1"]
+# for gene in target:
+#     try:
+#         # res = k.find("hsa", gene)
+#         # print(res)
+#         des = k.get(":".join(["hsa", gene]))
+#         print(des)
+#
+#         # res = TCA.KEGGParser(des)
+#         # print(res['PATHWAY'])
+#         # print(json.dumps(res, indent=4))
+#
+#         # path = k.get(res['PATHWAY'][0].split()[0], "kgml")
+#         # print(path)
+#
+#     except:
+#         pass
 
-    # psi = BioREST.PSICQUIC()
-    # psi.TIMEOUT = 10
-    # psi.RETRIES = 1
-    # psi.retrieve_all('NXF1')
+# psi = BioREST.PSICQUIC()
+# psi.TIMEOUT = 10
+# psi.RETRIES = 1
+# psi.retrieve_all('NXF1')
 
-    # hgnc = BioREST.HGNC()
-    # print(json.dumps(hgnc._info, indent=4))
-    # res = hgnc.fetch(storedfield='symbol', term='ALAS2')
-    # print(json.dumps(res, indent=4))
-    # print(res['response']['docs'][0]['ensembl_gene_id'])
+# hgnc = BioREST.HGNC()
+# print(json.dumps(hgnc._info, indent=4))
+# res = hgnc.fetch(storedfield='symbol', term='ALAS2')
+# print(json.dumps(res, indent=4))
+# print(res['response']['docs'][0]['ensembl_gene_id'])
 
-    gene = target
+# gene = target
 
-    string = BioREST.String(identity='kopp@igbmc.fr')
-    res = string.resolve(gene, species='9606')
-    # print(json.dumps(res, indent=4))
-    id_gene = []
-    # in case of multiple return, search for
-    for i in res:
-        if i['preferredName'] in gene:
-            id_gene.append(i['stringId'])
+# string = BioREST.String(identity='kopp@igbmc.fr')
+# res = string.resolve(gene, species='9606')
+# print(json.dumps(res, indent=4))
+# id_gene = []
+# in case of multiple return, search for
+# for i in res:
+#     if i['preferredName'] in gene:
+#         id_gene.append(i['stringId'])
+#
+# print(id_gene)
+# print(list2string(id_gene, sep='\n', space=False))
+# interaction = string.interactions(identifier=id_gene, frmt='psi-mi-tab', species=9606)
+# print(interaction)
+# file = open('/home/arnaud/Desktop/inter.txt', mode='w')
+# file.write(interaction)
+# file.close()
+# table = pd.read_table(StringIO(interaction), header=None)
+# print(table)
 
-    print(id_gene)
-    print(list2string(id_gene, sep='\n', space=False))
-    interaction = string.interactions(identifier=id_gene, frmt='psi-mi-tab', species=9606)
-    # print(interaction)
-    # file = open('/home/arnaud/Desktop/inter.txt', mode='w')
-    # file.write(interaction)
-    # file.close()
-    table = pd.read_table(StringIO(interaction), header=None)
-    print(table)
+# react = BioREST.Reactome()
+# print(json.dumps(react.query_hit_pathways(target), indent=4))
+#
+# biogrid = BioREST.Biogrid(acceskey="dc589cabccb374194e060d3586b31349")
+# data = biogrid.interaction(geneList='NXF1', taxId=9606)
+#
+# df = BioREST.BiogridParser(data_input=data)
+# print(df)
 
-    # react = BioREST.Reactome()
-    # print(json.dumps(react.query_hit_pathways(target), indent=4))
-    #
-    # biogrid = BioREST.Biogrid(acceskey="dc589cabccb374194e060d3586b31349")
-    # data = biogrid.interaction(geneList='NXF1', taxId=9606)
-    #
-    # df = BioREST.BiogridParser(data_input=data)
-    # print(df)
+# dgidb = BioREST.DGIdb()
+# print(dgidb.Search_Interactions(genes=['FLT1', 'MM1', 'FAKE'], drug_types='antineoplastic',
+#                                 interaction_sources='TALC'))
+# print(dgidb.Interaction_Source())
+# print(dgidb.Interaction_Type())
+# print(dgidb.Gene_Categories())
+# print(dgidb.Source_Trust_Levels())
+# print(dgidb.Drug_Types())
 
-    # dgidb = BioREST.DGIdb()
-    # print(dgidb.Search_Interactions(genes=['FLT1', 'MM1', 'FAKE'], drug_types='antineoplastic',
-    #                                 interaction_sources='TALC'))
-    # print(dgidb.Interaction_Source())
-    # print(dgidb.Interaction_Type())
-    # print(dgidb.Gene_Categories())
-    # print(dgidb.Source_Trust_Levels())
-    # print(dgidb.Drug_Types())
-
-rest()
+pdb = BioREST.PDB()
+res = pdb.describe_pdb('4HHB')
+print(res)
