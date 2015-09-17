@@ -8,7 +8,7 @@ from BioREST.Ensembl import Ensembl
 from BioREST.Eutils import EUtils, EUtilsParser
 from BioREST.Fasta import FASTA, MultiFASTA
 from BioREST.Intact import Intact
-from BioREST.KEGG import KEGG, KEGGParser
+from BioREST.KEGG import KEGG, KEGGParser, KEGGParser2
 from BioREST.Psicquic import Psicquic, AppsPPI
 from BioREST.QuickGo import QuickGo
 from BioREST.Reactome import Reactome, ReactomeAnalysis

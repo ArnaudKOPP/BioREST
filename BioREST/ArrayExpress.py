@@ -293,8 +293,46 @@ class ArrayExpress(REST):
         .. warning:: if format is json, filenames cannot be found so you
             must use format set to xml
         """
-        assert self.format == "xml", log.error("json format not supported to retrieve the filenames")
-        res = self.queryExperiments(keywords=experiment)
-        exp = res.getchildren()[0]
-        files = [x.getchildren() for x in exp.getchildren() if x.tag == "files"]
-        return [x.get("name") for x in files[0]]
+        if self.format != "xml":
+            frmt = 'xml'
+        try:
+            res = self.queryExperiments(keywords=experiment)
+            exp = res.getchildren()[0]
+            files = [x.getchildren() for x in exp.getchildren() if x.tag == "files"]
+            output = [x.get("name") for x in files[0]]
+            if self.format != 'xml':
+                self.format = frmt
+        except Exception as err:
+            if self.format != 'xml':
+                self.format = frmt
+            raise Exception(err)
+        return output
+
+    def queryAE(self, **kargs):
+        """
+        Returns list of experiments
+        See :meth:`queryExperiments` for parameters and usage
+        This is a wrapper around :meth:`queryExperiments` that returns only
+        the accession values.
+        """
+        frmt = self.format
+        self.format = 'json'
+        try:
+            sets = self.queryExperiments(**kargs)
+        except:
+            pass
+        self.format = frmt
+        return [x['accession'] for x in sets['experiments']['experiment']]
+
+    def getAE(self, accession, type='full'):
+        """
+        retrieve all files from an experiments and save them locally
+        """
+        filenames = self.retrieveFilesFromExperiment(accession)
+        self.info("Found %s files" % len(filenames))
+        for i,filename in enumerate(filenames):
+            res = self.retrieveFile(accession, filename)
+            fh = open(filename, 'w')
+            self.info("Downloading %s" % filename)
+            fh.write(res)
+            fh.close()

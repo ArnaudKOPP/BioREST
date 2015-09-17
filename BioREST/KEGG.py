@@ -36,90 +36,7 @@ KEGG DGOUP 	    dgroup 	    dg 	        DG number 	    Japanese version: dgroup_
 KEGG ENVIRON 	environ 	ev 	        E number 	    Japanese version: environ_ja ev_ja
 ===================================================================================
 
-# #### KEGG REST TEST
 
-    from BioREST import KEGG, KEGGParser
-    k = KEGG(verbose=True)
-    # print(k.tnumber_to_code("T01001"))
-    # print(k.databases)
-    # print(k.code_to_tnumber("hsa"))
-    # print(k.is_organism("hsa"))
-    # print(k.info())
-    # print(k.info("hsa"))
-    # print(k.info("T01001"))  # same as above
-    # print(k.info("pathway"))
-    # k.list('organism')
-    # print(k.organismIds)
-    # print(k.pathwayIds)
-    # print(k.get("hsa:7535"))
-    # print(k.list("pathway", organism="hsa"))
-    # print(k.list("pathway"))  # returns the list of reference pathways
-    # print(k.list("pathway", "hsa"))  # returns the list of human pathways
-    # print(k.list("organism"))  # returns the list of KEGG organisms with taxonomic classification
-    # print(k.list("hsa"))  # returns the entire list of human genes
-    # print(k.list("T01001"))  # same as above
-    # print(k.list("hsa:10458+ece:Z5100"))  # returns the list of a human gene and an E.coli O157 gene
-    # print(k.list("cpd:C01290+gl:G00092"))  # returns the list of a compound entry and a glycan entry
-    # print(k.list("C01290+G00092"))  # same as above
-    # # search for pathways that contain Viral in the definition
-    # print(k.find("pathway", "Viral"))
-    # # for keywords "shiga" and "toxin"
-    # print(k.find("genes", "shiga+toxin"))
-    # # for keywords "shiga toxin"
-    # print(k.find("genes", "shiga toxin"))
-    # # for chemical formula "C7H10O5"
-    # print(k.find("compound", "C7H10O5", "formula"))
-    # # for chemical formula containing "O5" and "C7"
-    # print(k.find("compound", "O5C7", "formula"))
-    # # for 174.045 =< exact mass < 174.055
-    # print(k.find("compound", "174.05", "exact_mass"))
-    # # for 300 =< molecular weight =< 310
-    # print(k.find("compound", "300-310", "mol_weight"))
-    # # retrieves a compound entry and a glycan entry
-    # print(k.get("cpd:C01290+gl:G00092"))
-    # # same as above
-    # print(k.get("C01290+G00092"))
-    # # retrieves a human gene entry and an E.coli O157 gene entry
-    # print(k.get("hsa:10458+ece:Z5100"))
-    # # retrieves amino acid sequences of a human gene and an E.coli O157 gene
-    # print(k.get("hsa:10458+ece:Z5100/aaseq"))
-    # res = k.get("hsa05130/image")
-    # # same as : res = s.get("hsa05130","image")
-    # f = open("test.png", "wb")
-    # f.write(res)
-    # f.close()
-    # # conversion from NCBI GeneID to KEGG ID for E. coli genes
-    # print(k.conv("eco", "ncbi-geneid"))
-    # # inverse of the above example
-    # print(k.conv("eco", "ncbi-geneid"))
-    # # conversion from KEGG ID to NCBI GI
-    # print(k.conv("ncbi-gi", "hsa:10458+ece:Z5100"))
-    # # KEGG pathways linked from each of the human genes
-    # print(k.link("pathway", "hsa"))
-    # # human genes linked from each of the KEGG pathways
-    # print(k.link("hsa", "pathway"))
-    # # KEGG pathways linked from a human gene and an E. coli O157 gene.
-    # print(k.link("pathway", "hsa:10458+ece:Z5100"))
-    # # show a pathway in the browser
-    # k.show_pathway("path:hsa05416", scale=50)
-    # # Same as above but also highlights some KEGG Ids (red for all)
-    # k.show_pathway("path:hsa05416", dcolor="white", keggid=['1525', '1604', '2534'])
-    # # You can refine the colors using a dictionary:
-    # k.show_pathway("path:hsa05416", dcolor="white", keggid={'1525': 'yellow,red', '1604': 'blue,green', '2534': "blue"})
-    # print(k.get_pathway_by_gene("7535", "hsa"))
-    # s = KEGGParser()
-    # data = s.get("hsa:7535")
-    # dict_data = s.parse(data)
-    # print(dict_data)
-    # data = s.get("hsa04660")
-    # dict_data = s.parse(data)
-    # print(dict_data['gene'])
-    # res = s.get("hsa04660", "kgml")
-    # print(res)
-    # res = s.parse_kgml_pathway("hsa04660")
-    # # print(res)
-    # res['relations']
-    # print(res['relations'][0])
 
 """
 
@@ -440,6 +357,22 @@ class KEGG(REST):
         res = webbrowser.open(url)
         return res
 
+    def show_module(self, modId):
+        """
+        Show a given module inside a web browser
+        :param str modId: a valid module Id. See :meth:`moduleIds`
+        Validity of modId is not checked but if wrong the URL will not open a
+        proper web page.
+        """
+        if modId.startswith("md:"):
+            modId = modId.split(":")[1]
+        url = "http://www.kegg.jp/module/" + modId
+        self.logging.info(url)
+        res = webbrowser.open(url)
+        return res
+
+    # wrapper of all databases to ease access to them (buffered)
+
     def _get_db(self):
         return KEGG.info(self)
 
@@ -579,6 +512,23 @@ class KEGG(REST):
                 matches.append(i)
         return [definitions[i] for i in matches]
 
+    def get_pathway_by_gene(self, gene, organism):
+        """
+        Search for pathways that contain a specific gene
+        :param str gene: a valid gene Id
+        :param str organism: a valid organism (e.g., hsa)
+        :return: list of pathway Ids that contain the gene
+        ::
+            >>> s.get_pathway_by_gene("7535", "hsa")
+            ['path:hsa04064', 'path:hsa04650', 'path:hsa04660', 'path:hsa05340']
+        """
+        res = self.get(":".join([organism, gene]))
+        dic = self.parse(res)
+        if 'PATHWAY' in dic.keys():
+            return dic['PATHWAY']
+        else:
+            print("No pathway found ?")
+
     def parse_kgml_pathway(self, pathways_id, res=None):
         """
         Parse the pathway in KGML format and returns a dictionary (relations and entries)
@@ -684,3 +634,326 @@ def KEGGParser(res):
             last_idx = line.split()[0]
             output[last_idx] = [line[10:].strip()]
     return output
+
+def KEGGParser2(res):
+
+    def _parse(res):
+
+        if res == 404:
+            return
+        keys = [x.split(" ")[0] for x in res.split("\n") if len(x) and x[0]!=" "
+                and x!="///"]
+        # let us go line by to not forget anything and know which entries are
+        # found in the RHS. We may have duplicated once as can be found in th
+        # keys variable as well.
+        entries = []
+        entry = ""
+        start = True
+        for line in res.split("\n"):
+            if line == '///':
+                entries.append(entry)
+            elif len(line) == 0:
+                pass
+            elif line[0] != " ":
+                if start == True:
+                    start = False
+                else:
+                    entries.append(entry)
+                entry = line[:]
+            else:
+                entry+= "\n"+line[:]
+
+        # we can now look at each entry and create a dictionary.
+        # The dictionary will contain as key the name found in the LHS
+        # e.g., REACTION and the value will be either the entry content
+        # as a string or a list of strings if the key is not unique
+        # e.g., for references. This could be a bit annoying since
+        # for example References could appear only once if some cases.
+        # This can be tested though by checking the type
+        import collections
+        output = collections.OrderedDict()
+        for entry in entries:
+            name = entry.split("\n")[0].split()[0]
+            if keys.count(name) == 1:
+                output[name] = entry[:]
+            else:
+                if name in output.keys():
+                    output[name].append(entry[:])
+                else:
+                    output[name] = [entry[:]]
+
+        # remove name that are now the keys of the dictionary anyway
+        # if the values is not a list
+        for k,v in output.items():
+            if k in ['CHROMOSOME', 'TAXONOMY']:
+                continue
+            try:
+                output[k] = output[k].strip().replace(k,'',1) # remove the name that
+            except: # skip the lists
+                pass
+
+        # Now, let us do the real stuff.
+        # This is tricky since format is not consistent with the names e,g
+        # REACTIONS could be sometimes a list of names and sometimes list
+        # of reactions with their description.
+
+        for key, value in output.items():
+            # convert to a dict
+            if key == 'STATISTICS':
+                data = [x.split(":",1) for x in output[key].split("\n")]
+                data = dict([(x[0].strip(), float(x[1].strip())) for x in data])
+                output[key] = data
+            # strip only expecting a single line (string)
+            elif key in ['POSITION', 'DESCRIPTION', 'ENTRY', 'ORGANISM',
+                    'CLASS', 'FORMULA', 'KEYWORDS', 'CATEGORY', 'ANNOTATION',
+                    'DATA_SOURCE', 'MASS', 'COMPOSITION', 'DEFINITION',
+                    'KO_PATHWAY', 'EQUATION', 'TYPE', 'RCLASS']:
+                # get rid of \n
+
+                if "\n" in value:
+                    # happens in description path:hsa04915
+                    print("warning for debugging in %s" % key)
+                    value = value.replace("\n", " ")
+                # nothing to do here except strip
+                output[key] = value.strip()
+            # list : set of lines
+            # COMMENT is sometimes on several lines
+            elif key in ['NAME', 'REMARK', 'ACTIVITY', 'COMMENT', 'ORIGINAL_DB']:
+                output[key] = [x.strip() for x in value.split("\n")]
+            # list: long string splitted into items and therefore converted to a list
+            elif key in ['ENZYME', 'REACTION',  'RPAIR', 'RELATEDPAIR']:
+                # RPAIR/rn:R00005 should be a dict if "_" found
+                # REACTION/md:hsa_M00554 should be a dict if '->' found
+                if '->' in value or "_" in value:
+                    kp = {}
+                    for line in value.split("\n"):
+                        try:
+                            k,v = line.strip().split(None,1)
+                        except:
+                            self.warning("empty line in %s %s" % (key, line))
+                            k = line.strip()
+                            v = ''
+                        kp[k] = v
+                    output[key] = kp.copy()
+                else:
+                    output[key] = [x.strip() for x in value.split()]
+            # transform to dictionary
+            elif key in ['DRUG', 'ORTHOLOGY', 'GENE', 'COMPOUND', 'RMODULE',
+                    'DISEASE', 'PATHWAY_MAP',
+                    'STR_MAP', 'PATHWAY', 'MODULE', 'GENES']:
+                kp = {}
+                for line in value.split("\n"):
+                    try: # empty orthology in rc:RC00004
+                        k,v = line.strip().split(None,1)
+                    except:
+                        log.warning("empty line in %s %s" % (key, line))
+                        k = line.strip()
+                        v = ''
+                    if k.endswith(":"):
+                        k = k.strip().rstrip(":")
+                    kp[k] = v
+                output[key] = kp.copy()
+            # list of dictionaries
+            elif key == 'REFERENCE':
+                # transform to a list since you may have several entries
+                newvalue = [_interpret_references(this)
+                        for this in _tolist(value)]
+                output[key] = newvalue
+            # list of dictionaries
+            elif key == 'PLASMID':
+                newvalue = [_interpret_plasmid(this)
+                        for this in _tolist(value)]
+                output[key] = newvalue
+            # list of dictionaries
+            elif key == 'CHROMOSOME':
+                newvalue = [_interpret_chromosome(this)
+                    for this in _tolist(value)]
+                output[key] = newvalue
+            # list of dictionaries
+            elif key == 'TAXONOMY':
+                newvalue = [_interpret_taxonomy(this)
+                    for this in _tolist(value)]
+                output[key] = newvalue
+
+            # dictionary, interpreted as follows
+            # on each line, there is an identifier followed by : character
+            # looks like there is just one line...
+            elif key in ['DRUG_TARGET', 'STRUCTURE', 'MOTIF']:
+                # STRUCTURE PDB can be long and span over several lines. e.g.,
+                # hsa:1525
+                new = {}
+                import re
+                value = re.sub("\n {6,20}", " ", value)
+                for line in value.split("\n"):
+                    thiskey, content = line.split(None, 1)
+                    if thiskey.endswith(":"):
+                        new[thiskey[:-1]] = content
+                    else:
+                        log.warning("Could not fully interpret %s " % key )
+                output[key] = new
+            elif key in ['DBLINKS', 'INTERACTION', 'METABOLISM']:
+                # D01441 for metabolism
+                # DBLINKS for C00624 should work out of the box
+                new = {}
+                import re
+                value = re.sub("\n {12,12+1}", "\n", value)
+                for line in value.split("\n"):
+                    thiskey, content = line.strip().split(":", 1)
+                    new[thiskey] = content.strip()
+                output[key] = new
+            # floats
+            elif key in ['EXACT_MASS', 'MOL_WEIGHT']:
+                output[key] = float(value)
+            # get rid of the length
+            elif key in ['AASEQ', 'NTSEQ']:
+                output[key] = value.split("\n", 1)[1].replace("\n","").replace(" ", "")
+            elif key.startswith("ENTRY"):
+                newvalue = _interpret_entry(value)
+                output[key] = newvalue.strip()
+            # extract list of strings from structure. These strings are not
+            # interpreted
+            elif key in ['ATOM', 'BOND', 'NODE', 'EDGE', 'ALIGN', 'RDM']:
+                # starts with a number that defines number of entries. Let us
+                # get rid of that number and then send a list
+                output[key] = _interpret_enumeration(output[key])
+            # not interpreted
+            elif key in ['BRACKET', 'COMPONENT', 'SOURCE', 'BRITE',
+                    'CARCINOGEN', 'MARKER', 'PRODUCT']: # do not interpret to keep structure
+                pass
+            else:
+                print("""\nWarning. Found keyword %s, which has not special parsing for now. please report this issue with the identifier (%s) into github.com/bioservices""" % (key,output['ENTRY']))
+
+        return output
+
+    def _interpret_enumeration(data):
+        N = data.strip().split("\n")[0]
+        # must be a number
+        N = int(N)
+        lines = data.strip().split("\n")[1:]
+        lines = [line.strip() for line in lines]
+        if len(lines) != N:
+            self.warning('number of lines not as expected in %s' % data)
+
+        if N == 0:
+            return []
+        else:
+            return lines
+
+    def _tolist(value):
+        # transform to a list since you may have several entries
+        if isinstance(value, list) is False:
+            value = [value]
+        return value
+
+    def _interpret_entry(data):
+        res = {}
+
+        return res
+        for this in data.split("\n"):
+            if this.strip().startswith("ENTRY"):
+                pass
+            elif this.strip().startswith("COMPOUND"):
+                res['COMPOUND'] = this.strip().split(None,1)[1]
+            elif this.strip().startswith("ATOM"):
+                res['AUTHORS'] = this.strip().split(None,1)[1]
+            elif this.strip().startswith("TITLE"):
+                res['TITLE'] = this.strip().split(None,1)[1]
+        return res
+
+    def _interpret_taxonomy(data):
+        res = {}
+        for this in data.split("\n"):
+            if this.strip().startswith("TAXONOMY"):
+                res['TAXONOMY'] = this.strip()
+            elif this.strip().startswith('LINEAGE'):
+                res['LINEAGE'] = this.strip().split(None,1)[1]
+        return res
+
+    def _interpret_references(data):
+        res = {}
+        for this in data.split("\n"):
+            if this.strip().startswith("REFERENCE"):
+                res['REFERENCE'] = this.strip().split(None,1)[1]
+            elif this.strip().startswith("JOURNAL"):
+                res['JOURNAL'] = this.strip().split(None,1)[1]
+            elif this.strip().startswith("AUTHORS"):
+                res['AUTHORS'] = this.strip().split(None,1)[1]
+            elif this.strip().startswith("TITLE"):
+                res['TITLE'] = this.strip().split(None,1)[1]
+        return res
+
+    def _interpret_plasmid(data):
+        res = {}
+        for this in data.split("\n"):
+            if this.strip().startswith("PLASMID"):
+                res['PLASMID'] = this.strip().split(None,1)[1]
+            elif this.strip().startswith("LENGTH"):
+                res['LENGTH'] = this.strip().split(None,1)[1]
+            elif this.strip().startswith("SEQUENCE"):
+                res['SEQUENCE'] = this.strip().split(None,1)[1]
+        return res
+
+    def _interpret_chromosome(data):
+        res = {}
+        for this in data.split("\n"):
+            if this.strip().startswith("CHROMOSOME"):
+                try:
+                    res['CHROMOSOME'] = this.strip().split(None,1)[1]
+                except:
+                    #genome:T00012 has no name
+                    res['CHROMOSOME'] = this.strip()
+            elif this.strip().startswith("LENGTH"):
+                res['LENGTH'] = this.strip().split(None,1)[1]
+            elif this.strip().startswith("SEQUENCE"):
+                res['SEQUENCE'] = this.strip().split(None,1)[1]
+        return res
+
+    entry = res.split("\n")[0].split()[0]
+    if entry == "ENTRY":
+        dbentry = res.split("\n")[0].split(None, 2)[2]
+    else:
+        dbentry='?'
+        raise ValueError
+
+    try:
+        parser = _parse(res)
+    except Exception as err:
+        log.warning("Could not parse the entry %s correctly" % dbentry)
+        log.warning(err)
+        parser = res
+    return parser
+
+class KEGGTools(KEGG):
+    """Load all genes from the database.
+    ::
+        k = kegg.KEGGTools()
+        k.load_genes("hsa")
+        genes = k.scan_genes()
+    """
+    def __init__(self, verbose=False, organism="hsa"):
+        self.kegg = KEGG()
+        self.parser = KEGGParser()
+        print("initialisation")
+        self.load_genes(organism)
+
+    def load_genes(self, organism):
+        res = self.parser.list(organism)
+        self.genes =  [x.split("\t")[0] for x in res.strip().split("\n")]
+        return self.genes
+
+    def scan_genes(self):
+        genes = {}
+        for i, gene in enumerate(self.genes):
+            genes[gene] = self.parser.parse(self.kegg.get(self.genes[i]))
+        return genes
+
+    def load_reactions(self, organism):
+        reactions = self.kegg.list('reaction')
+        self.reactions = [x.split()[0] for x in reactions.split("\n") if len(x)]
+        return self.reactions
+
+    def scan_reactions(self):
+        reactions = {}
+        for i, this in enumerate(self.reactions):
+            reactions[this] = self.parser.parse(self.kegg.get(self.reactions[i]))
+        return reactions
