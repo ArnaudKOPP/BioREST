@@ -79,19 +79,11 @@ logging.getLogger('urllib3').setLevel(logging.CRITICAL)
 # df = BioREST.BiogridParser(data_input=data)
 # print(df)
 
-# dgidb = BioREST.DGIdb()
-# print(dgidb.Search_Interactions(genes=['FLT1', 'MM1', 'FAKE'], drug_types='antineoplastic',
-#                                 interaction_sources='TALC'))
-# print(dgidb.Interaction_Source())
-# print(dgidb.Interaction_Type())
-# print(dgidb.Gene_Categories())
-# print(dgidb.Source_Trust_Levels())
-# print(dgidb.Drug_Types())
 
 # #### KEGG REST TEST
 
-from BioREST import KEGG, KEGGParser, KEGGParser2
-k = KEGG()
+# from BioREST import KEGG, KEGGParser, KEGGParser2
+# k = KEGG()
 # print(k.tnumber_to_code("T01001"))
 # print(k.databases)
 # print(k.code_to_tnumber("hsa"))
@@ -159,12 +151,12 @@ k = KEGG()
 # # You can refine the colors using a dictionary:
 # k.show_pathway("path:hsa05416", dcolor="white", keggid={'1525': 'yellow,red', '1604': 'blue,green', '2534': "blue"})
 # print(k.get_pathway_by_gene("7535", "hsa"))
-data = k.get("hsa:1203")
-print(data)
-res = KEGGParser2(data)
-print(json.dumps(res, indent=4))
-res2 = KEGGParser(data)
-print(json.dumps(res2, indent=4))
+# data = k.get("hsa:1203")
+# print(data)
+# res = KEGGParser2(data)
+# print(json.dumps(res, indent=4))
+# res2 = KEGGParser(data)
+# print(json.dumps(res2, indent=4))
 # data = s.get("hsa04660")
 # dict_data = s.parse(data)
 # print(dict_data['gene'])
