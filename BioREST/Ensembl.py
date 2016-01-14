@@ -35,9 +35,9 @@ Interface to Ensembl web service
 """
 
 __author__ = "Arnaud KOPP"
-__copyright__ = "© 2015 KOPP Arnaud All Rights Reserved"
+__copyright__ = "© 2015-2016 KOPP Arnaud All Rights Reserved"
 __credits__ = ["KOPP Arnaud"]
-__license__ = "GNU GPL V2.0"
+__license__ = "GNU GPL V3.0"
 __maintainer__ = "Arnaud KOPP"
 __email__ = "kopp.arnaud@gmail.com"
 __status__ = "Production"
@@ -1305,7 +1305,7 @@ class Ensembl(REST):
                            species=None, type='genomic'):
         """
         Request multiple types of sequence by stable identifier.
- 
+
         :param identifier: An Ensembl stable ID
         :param frmt: response formats: fasta, json, text, yam, jsonp
         :param db_type: Restrict the search to a database other than the

@@ -28,3 +28,11 @@ BioServices provides access to this webservices :
 * requests
 * beautifulsoup4
 * Pandas ( optional but highly recommended )
+
+## License
+
+This work is under [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html) licence.
+<kopp@igbmc.fr>
+
+
+© 2015-2016 KOPP Arnaud All Rights Reserved

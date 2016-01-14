@@ -12,9 +12,9 @@ REST Documentation : https://www.encodeproject.org/help/rest-api/
 """
 
 __author__ = "Arnaud KOPP"
-__copyright__ = "© 2015 KOPP Arnaud All Rights Reserved"
+__copyright__ = "© 2015-2016 KOPP Arnaud All Rights Reserved"
 __credits__ = ["KOPP Arnaud"]
-__license__ = "GNU GPL V2.0"
+__license__ = "GNU GPL V3.0"
 __maintainer__ = "Arnaud KOPP"
 __email__ = "kopp.arnaud@gmail.com"
 __status__ = "Production"
