@@ -13,9 +13,6 @@ from BioREST.Psicquic import Psicquic, AppsPPI
 from BioREST.QuickGo import QuickGo
 from BioREST.Reactome import Reactome, ReactomeAnalysis
 from BioREST.String import String
-from BioREST.TogoWS import TogoWS
 from BioREST.Uniprot import Uniprot
 from BioREST.HGNC import HGNC
-from BioREST.DGIdb import DGIdb
-from BioREST.BioCyc import BioCyc
 from BioREST.PDB import PDB

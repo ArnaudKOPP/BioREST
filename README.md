@@ -9,7 +9,6 @@ BioServices provides access to this webservices :
 * BioDBnet
 * BioGriD
 * Biomart
-* DGIdb
 * Encode
 * Ensembl
 * Eutils
@@ -17,11 +16,11 @@ BioServices provides access to this webservices :
 * HGNC
 * Intact
 * KEGG
+* PDB
 * Psicquic
 * QuickGo
 * Reactome
 * String
-* TogoWS
 * Uniprot
 
 ## Requirement
@@ -35,4 +34,4 @@ This work is under [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html) licence.
 <kopp@igbmc.fr>
 
 
-© 2015-2016 KOPP Arnaud All Rights Reserved
+© 2015-2017 KOPP Arnaud All Rights Reserved
